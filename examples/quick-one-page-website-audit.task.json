@@ -1,0 +1,29 @@
+{
+  "actId": "6Zr3MuFWdIZHvc0b8",
+  "name": "quick-one-page-website-audit",
+  "title": "Quick one-page website SEO audit",
+  "description": "Audit one public webpage for technical SEO, link, indexability, TLS, and security-header issues, then generate structured and HTML reports.",
+  "options": {
+    "build": "latest",
+    "timeoutSecs": 300,
+    "memoryMbytes": 1024,
+    "maxItems": 1,
+    "maxTotalChargeUsd": 0.05,
+    "restartOnError": false
+  },
+  "input": {
+    "startUrl": "https://example.com",
+    "confirmAuthorizedUse": false,
+    "maxPages": 1,
+    "maxCrawlDepth": 0,
+    "maxLinksPerPage": 25,
+    "checkExternalLinks": false,
+    "maxExternalLinks": 0,
+    "includePerformance": false,
+    "maxPerformancePages": 1,
+    "compareWithPreviousRun": false,
+    "generateHtmlReport": true,
+    "generatePdfReport": false,
+    "failOnSeverity": "none"
+  }
+}
