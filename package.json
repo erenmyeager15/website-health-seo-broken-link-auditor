@@ -1,0 +1,37 @@
+{
+  "name": "website-health-seo-broken-link-auditor",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Authorized website QA and regression-monitoring Apify Actor for technical SEO, broken links, security headers, and baselines.",
+  "license": "Apache-2.0",
+  "main": "dist/src/main.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/src/main.js",
+    "check": "tsc --noEmit --noUnusedLocals --noUnusedParameters",
+    "check:entrypoint": "node -e \"require('node:fs').accessSync('dist/src/main.js')\"",
+    "validate:schemas": "npx --yes apify-cli@1.7.1 validate-schema",
+    "test": "npm run build && node --test --experimental-test-coverage dist/tests/*.test.js",
+    "verify": "npm run check && npm test && npm run check:entrypoint && npm run validate:schemas"
+  },
+  "dependencies": {
+    "@crawlee/basic": "^3.17.0",
+    "apify": "^3.4.4",
+    "cheerio": "^1.0.0",
+    "fast-xml-parser": "^5.10.1",
+    "pdf-lib": "^1.17.1",
+    "robots-parser": "^3.0.1",
+    "tldts": "^6.1.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.9.2"
+  },
+  "overrides": {
+    "adm-zip": "^0.6.0"
+  }
+}

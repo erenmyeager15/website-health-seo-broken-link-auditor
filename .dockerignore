@@ -1,0 +1,10 @@
+node_modules
+dist
+storage
+.git
+.github
+.env
+.env.*
+npm-debug.log*
+*.log
+REVIEW-HANDOFF.md

@@ -1,0 +1,25 @@
+{
+  "actorKeyValueStoreSchemaVersion": 1,
+  "title": "Audit reports and baseline data",
+  "description": "Structured summary, optional reports, and internal regression baselines produced by the audit.",
+  "collections": {
+    "summary": {
+      "title": "Audit summary",
+      "description": "Machine-readable audit summary.",
+      "key": "OUTPUT",
+      "contentTypes": ["application/json"]
+    },
+    "htmlReport": {
+      "title": "HTML report",
+      "description": "Self-contained human-readable audit report.",
+      "key": "report.html",
+      "contentTypes": ["text/html"]
+    },
+    "pdfReport": {
+      "title": "PDF report",
+      "description": "Optional generated PDF audit report.",
+      "key": "report.pdf",
+      "contentTypes": ["application/pdf"]
+    }
+  }
+}

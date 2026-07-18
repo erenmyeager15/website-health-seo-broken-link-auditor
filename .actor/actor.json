@@ -1,0 +1,23 @@
+{
+  "actorSpecification": 1,
+  "name": "website-health-seo-broken-link-auditor",
+  "title": "Website SEO, Health & Broken Link Auditor",
+  "description": "Authorized website QA and regression-monitoring Actor. Performs deep technical SEO audits, broken link verification, redirect chain analysis, TLS and security header checks, and deterministic regression tracking against persistent baselines.",
+  "version": "1.0",
+  "dockerfile": "../Dockerfile",
+  "input": "./INPUT_SCHEMA.json",
+  "output": "./output_schema.json",
+  "readme": "../README.md",
+  "categories": ["DEVELOPER_TOOLS", "SEO_TOOLS", "AUTOMATION"],
+  "storages": {
+    "dataset": "./dataset_schema.json",
+    "keyValueStore": "./key_value_store_schema.json"
+  },
+  "defaultRunOptions": {
+    "build": "latest",
+    "memoryMbytes": 1024,
+    "timeoutSecs": 3600
+  },
+  "minMemoryMbytes": 256,
+  "maxMemoryMbytes": 4096
+}

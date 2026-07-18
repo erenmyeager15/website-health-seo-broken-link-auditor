@@ -1,0 +1,244 @@
+{
+  "actorSpecification": 1,
+  "fields": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "recordType": {
+        "type": "string",
+        "const": "page_audit",
+        "title": "Record type",
+        "description": "Discriminator for a per-page website audit record."
+      },
+      "url": {
+        "type": "string",
+        "title": "Page URL",
+        "description": "Final page URL audited after redirects.",
+        "format": "uri"
+      },
+      "normalizedUrl": {
+        "type": "string",
+        "title": "Normalized URL",
+        "description": "Canonicalized URL used for deduplication.",
+        "format": "uri"
+      },
+      "statusCode": {
+        "type": "integer",
+        "title": "HTTP status",
+        "description": "HTTP status returned for the audited page.",
+        "minimum": 0,
+        "maximum": 599
+      },
+      "contentType": {
+        "type": "string",
+        "title": "Content type",
+        "description": "HTTP Content-Type response header."
+      },
+      "redirectChain": {
+        "type": "array",
+        "title": "Redirect chain",
+        "description": "Validated redirects followed before the final response.",
+        "items": { "type": "string", "format": "uri" }
+      },
+      "title": {
+        "type": ["string", "null"],
+        "title": "HTML title",
+        "description": "Text from the first HTML title element."
+      },
+      "metaDescription": {
+        "type": ["string", "null"],
+        "title": "Meta description",
+        "description": "Content of the page meta description, when present."
+      },
+      "canonicalUrl": {
+        "type": ["string", "null"],
+        "title": "Canonical URL",
+        "description": "Canonical URL declared by the page, when present."
+      },
+      "indexability": {
+        "type": "object",
+        "title": "Indexability",
+        "description": "Signals that determine whether search engines may index the page.",
+        "additionalProperties": false,
+        "properties": {
+          "isIndexable": { "type": "boolean" },
+          "robotsMeta": { "type": "array", "items": { "type": "string" } },
+          "xRobotsTag": { "type": "array", "items": { "type": "string" } },
+          "robotsTxtAllowed": { "type": "boolean" },
+          "reason": { "type": "string" }
+        },
+        "required": ["isIndexable", "robotsMeta", "xRobotsTag", "robotsTxtAllowed"]
+      },
+      "headings": {
+        "type": "object",
+        "title": "Heading summary",
+        "description": "Counts and text extracted from page headings.",
+        "additionalProperties": false,
+        "properties": {
+          "h1Count": { "type": "integer", "minimum": 0 },
+          "h1Texts": { "type": "array", "items": { "type": "string" } },
+          "h2Count": { "type": "integer", "minimum": 0 },
+          "h3Count": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["h1Count", "h1Texts", "h2Count", "h3Count"]
+      },
+      "linkSummary": {
+        "type": "object",
+        "title": "Link summary",
+        "description": "Counts of internal, external, broken, and access-blocked links.",
+        "additionalProperties": false,
+        "properties": {
+          "internalLinksCount": { "type": "integer", "minimum": 0 },
+          "externalLinksCount": { "type": "integer", "minimum": 0 },
+          "brokenLinksCount": { "type": "integer", "minimum": 0 },
+          "blockedLinksCount": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["internalLinksCount", "externalLinksCount", "brokenLinksCount", "blockedLinksCount"]
+      },
+      "brokenLinks": {
+        "type": "array",
+        "title": "Broken links",
+        "description": "Links that failed validation or returned a non-blocking error status.",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "url": { "type": "string" },
+            "statusCode": { "type": "integer", "minimum": 0, "maximum": 599 },
+            "errorMessage": { "type": "string" },
+            "isExternal": { "type": "boolean" }
+          },
+          "required": ["url", "isExternal"]
+        }
+      },
+      "imageSummary": {
+        "type": "object",
+        "title": "Image summary",
+        "description": "Image and missing-alt-text counts.",
+        "additionalProperties": false,
+        "properties": {
+          "totalImages": { "type": "integer", "minimum": 0 },
+          "missingAltCount": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["totalImages", "missingAltCount"]
+      },
+      "sitemapContext": {
+        "type": "object",
+        "title": "Sitemap context",
+        "description": "Whether this page was found in a validated in-scope sitemap.",
+        "additionalProperties": false,
+        "properties": {
+          "inSitemap": { "type": "boolean" },
+          "sitemapUrl": { "type": "string" }
+        },
+        "required": ["inSitemap"]
+      },
+      "performanceSummary": {
+        "type": "object",
+        "title": "Performance summary",
+        "description": "Optional PageSpeed Insights metrics or a bounded failure reason."
+      },
+      "tlsSummary": {
+        "type": "object",
+        "title": "TLS summary",
+        "description": "Observed certificate validity and expiry information for HTTPS pages."
+      },
+      "securityHeaders": {
+        "type": "object",
+        "title": "Security headers",
+        "description": "Selected response security headers observed on the page."
+      },
+      "issues": {
+        "type": "array",
+        "title": "Audit issues",
+        "description": "Deterministic findings with evidence and recommended fixes.",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ruleId": { "type": "string" },
+            "severity": { "type": "string", "enum": ["info", "warning", "error", "critical"] },
+            "category": { "type": "string" },
+            "message": { "type": "string" },
+            "evidence": { "type": "string" },
+            "recommendation": { "type": "string" },
+            "fingerprint": { "type": "string" }
+          },
+          "required": ["ruleId", "severity", "category", "message", "evidence", "recommendation", "fingerprint"]
+        }
+      },
+      "score": {
+        "type": "number",
+        "title": "Health score",
+        "description": "Deterministic page health score from 0 to 100.",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "auditedAt": {
+        "type": "string",
+        "title": "Audited at",
+        "description": "UTC timestamp when this page audit was completed.",
+        "format": "date-time"
+      }
+    },
+    "required": [
+      "recordType",
+      "url",
+      "normalizedUrl",
+      "statusCode",
+      "contentType",
+      "redirectChain",
+      "title",
+      "metaDescription",
+      "canonicalUrl",
+      "indexability",
+      "headings",
+      "linkSummary",
+      "brokenLinks",
+      "imageSummary",
+      "sitemapContext",
+      "performanceSummary",
+      "tlsSummary",
+      "securityHeaders",
+      "issues",
+      "score",
+      "auditedAt"
+    ]
+  },
+  "views": {
+    "overview": {
+      "title": "Page health",
+      "description": "Prioritized website health and SEO results for every audited page.",
+      "transformation": {
+        "fields": [
+          "url",
+          "statusCode",
+          "score",
+          "title",
+          "metaDescription",
+          "indexability",
+          "linkSummary",
+          "imageSummary",
+          "issues",
+          "auditedAt"
+        ]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "url": { "label": "Page URL", "format": "link" },
+          "statusCode": { "label": "Status", "format": "number" },
+          "score": { "label": "Score", "format": "number" },
+          "title": { "label": "Title", "format": "text" },
+          "metaDescription": { "label": "Meta description", "format": "text" },
+          "indexability": { "label": "Indexability", "format": "object" },
+          "linkSummary": { "label": "Links", "format": "object" },
+          "imageSummary": { "label": "Images", "format": "object" },
+          "issues": { "label": "Issues", "format": "array" },
+          "auditedAt": { "label": "Audited at", "format": "date" }
+        }
+      }
+    }
+  }
+}

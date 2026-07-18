@@ -1,0 +1,32 @@
+{
+  "$schema": "https://apify-projects.github.io/actor-json-schemas/output.json?v=0.3",
+  "actorOutputSchemaVersion": 1,
+  "title": "Website health audit output",
+  "description": "Page-level findings, a machine-readable summary, and optional client-ready reports.",
+  "properties": {
+    "results": {
+      "type": "string",
+      "title": "Page audit results",
+      "description": "Validated page-level audit records in the default dataset.",
+      "template": "{{links.apiDefaultDatasetUrl}}/items"
+    },
+    "summary": {
+      "type": "string",
+      "title": "Audit summary",
+      "description": "Machine-readable audit totals, regression counts, score, and report links.",
+      "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/OUTPUT"
+    },
+    "htmlReport": {
+      "type": "string",
+      "title": "HTML report",
+      "description": "Self-contained human-readable report when HTML output is enabled.",
+      "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/report.html"
+    },
+    "pdfReport": {
+      "type": "string",
+      "title": "PDF report",
+      "description": "Downloadable PDF report when PDF output is enabled.",
+      "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/report.pdf"
+    }
+  }
+}

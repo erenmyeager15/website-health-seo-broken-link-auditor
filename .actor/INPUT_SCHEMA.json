@@ -1,0 +1,123 @@
+{
+  "title": "Website SEO, Health & Broken Link Auditor Input Schema",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "startUrl": {
+      "title": "Start URL",
+      "type": "string",
+      "description": "The initial URL to start auditing. Must be HTTP or HTTPS.",
+      "editor": "textfield",
+      "prefill": "https://example.com"
+    },
+    "confirmAuthorizedUse": {
+      "title": "Confirm Authorized Use",
+      "type": "boolean",
+      "description": "I confirm that I own or have explicit authorization to audit the target website. Checking this box confirms existing authorization; it does not create permission. Mandatory for all domains except example.com.",
+      "default": false,
+      "prefill": false
+    },
+    "maxPages": {
+      "title": "Maximum Pages to Audit",
+      "type": "integer",
+      "description": "Maximum number of internal pages to crawl and audit (default 25, hard max 250).",
+      "minimum": 1,
+      "maximum": 250,
+      "default": 25,
+      "prefill": 1
+    },
+    "maxCrawlDepth": {
+      "title": "Maximum Crawl Depth",
+      "type": "integer",
+      "description": "Maximum link click depth from startUrl (default 3, max 10).",
+      "minimum": 0,
+      "maximum": 10,
+      "default": 3,
+      "prefill": 0
+    },
+    "maxLinksPerPage": {
+      "title": "Maximum Links per Page",
+      "type": "integer",
+      "description": "Maximum number of links extracted and queued per page (default 100, max 500).",
+      "minimum": 1,
+      "maximum": 500,
+      "default": 100,
+      "prefill": 25
+    },
+    "checkExternalLinks": {
+      "title": "Check External Links",
+      "type": "boolean",
+      "description": "Check status of external links (checked via HEAD/GET once, never recursively crawled).",
+      "default": true,
+      "prefill": false
+    },
+    "maxExternalLinks": {
+      "title": "Maximum External Links to Check",
+      "type": "integer",
+      "description": "Maximum total unique external links to check across the entire audit (default 250, max 2000).",
+      "minimum": 0,
+      "maximum": 2000,
+      "default": 250,
+      "prefill": 0
+    },
+    "includePerformance": {
+      "title": "Include PageSpeed Performance",
+      "type": "boolean",
+      "description": "Whether to fetch PageSpeed Insights data for top pages (disabled by default).",
+      "default": false,
+      "prefill": false
+    },
+    "pageSpeedApiKey": {
+      "title": "Google PageSpeed API Key",
+      "type": "string",
+      "description": "Optional user-provided API key for Google PageSpeed Insights. Never logged or stored in output.",
+      "isSecret": true,
+      "editor": "textfield"
+    },
+    "maxPerformancePages": {
+      "title": "Maximum Performance Pages",
+      "type": "integer",
+      "description": "Maximum number of pages to run through PageSpeed Insights (default 1, max 5).",
+      "minimum": 1,
+      "maximum": 5,
+      "default": 1,
+      "prefill": 1
+    },
+    "compareWithPreviousRun": {
+      "title": "Compare with Previous Run (Baseline Tracking)",
+      "type": "boolean",
+      "description": "Compare current findings against persistent baseline to identify new, resolved, and materially changed issues.",
+      "default": true,
+      "prefill": false
+    },
+    "baselineKey": {
+      "title": "Custom Baseline Key",
+      "type": "string",
+      "description": "Optional custom key-value store key name for baseline storage. If omitted, derived from target domain.",
+      "editor": "textfield"
+    },
+    "generateHtmlReport": {
+      "title": "Generate HTML Report",
+      "type": "boolean",
+      "description": "Generate a self-contained, interactive HTML audit report saved in the Key-Value Store.",
+      "default": true,
+      "prefill": true
+    },
+    "generatePdfReport": {
+      "title": "Generate PDF Report",
+      "type": "boolean",
+      "description": "Generate a downloadable PDF audit report saved in the Key-Value Store.",
+      "default": false,
+      "prefill": false
+    },
+    "failOnSeverity": {
+      "title": "Fail Run on Issue Severity Threshold",
+      "type": "string",
+      "description": "If set, the run will exit with failure (ciPassed=false) if any issue meets or exceeds this severity.",
+      "enum": ["none", "error", "critical"],
+      "enumTitles": ["None (always pass unless fatal error)", "Error or Critical", "Critical only"],
+      "default": "none"
+    }
+  },
+  "required": ["startUrl", "confirmAuthorizedUse"]
+}
