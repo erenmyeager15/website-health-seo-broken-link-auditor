@@ -2,7 +2,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { atomicPushAndChargePage } from '../src/billing/charging.js';
+import { atomicPushAndChargePage, interpretPagePushResult } from '../src/billing/charging.js';
 import {
   escapeHtml,
   generateDeterministicAgentSummary,
@@ -13,6 +13,33 @@ import {
 import type { AuditSummary, PageAuditRecord } from '../src/types.js';
 
 describe('Billing Safety & Reporting Summary', () => {
+  test('Owner PPE runs treat an unbilled stored row as successful', () => {
+    const result = interpretPagePushResult(true, {
+      eventChargeLimitReached: false,
+      chargedCount: 0,
+      chargeableWithinLimit: { 'page-audited': 100 },
+    });
+    assert.deepEqual(result, { success: true, limitReached: false });
+  });
+
+  test('PPE budget trimming is not treated as a stored row', () => {
+    const result = interpretPagePushResult(true, {
+      eventChargeLimitReached: true,
+      chargedCount: 0,
+      chargeableWithinLimit: { 'page-audited': 0 },
+    });
+    assert.deepEqual(result, { success: false, limitReached: true });
+  });
+
+  test('The final allowed paid page is stored before the budget stops further pages', () => {
+    const result = interpretPagePushResult(true, {
+      eventChargeLimitReached: true,
+      chargedCount: 1,
+      chargeableWithinLimit: { 'page-audited': 0 },
+    });
+    assert.deepEqual(result, { success: true, limitReached: true });
+  });
+
   test('Blocked or non-200/300 status codes do not charge as useful pages', async () => {
     const blockedRecord: PageAuditRecord = {
       recordType: 'page_audit',

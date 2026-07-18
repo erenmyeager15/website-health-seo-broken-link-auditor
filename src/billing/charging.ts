@@ -3,6 +3,29 @@ import type { PageAuditRecord } from '../types.js';
 
 export const PAGE_AUDITED_EVENT = 'page-audited';
 
+interface PagePushChargeResult {
+  eventChargeLimitReached: boolean;
+  chargedCount: number;
+  chargeableWithinLimit: Record<string, number>;
+}
+
+export function interpretPagePushResult(
+  isPricedEvent: boolean,
+  result: PagePushChargeResult,
+): { success: boolean; limitReached: boolean } {
+  // Owner runs store the row but are not billed, so chargedCount is zero even
+  // when the push succeeded. A zero count only means failure when the SDK also
+  // reports that the item was trimmed by the run budget.
+  const success = !isPricedEvent
+    || result.chargedCount > 0
+    || !result.eventChargeLimitReached;
+  const limitReached = isPricedEvent && (
+    result.eventChargeLimitReached
+    || result.chargeableWithinLimit[PAGE_AUDITED_EVENT] === 0
+  );
+  return { success, limitReached };
+}
+
 /** Returns the maximum number of paid page units that fit within the run budget. */
 export function getPageAuditAllowance(requestedPages: number): number {
   try {
@@ -36,11 +59,7 @@ export async function atomicPushAndChargePage(
     const pricing = manager.getPricingInfo();
     const isPricedEvent = pricing.isPayPerEvent && pricing.perEventPrices[PAGE_AUDITED_EVENT] !== undefined;
     const result = await Actor.pushData(record, PAGE_AUDITED_EVENT);
-    const success = !isPricedEvent || result.chargedCount === 1;
-    const limitReached = isPricedEvent && (
-      result.eventChargeLimitReached
-      || result.chargeableWithinLimit[PAGE_AUDITED_EVENT] === 0
-    );
+    const { success, limitReached } = interpretPagePushResult(isPricedEvent, result);
 
     if (!success && limitReached) {
       log.warning(`Maximum cost reached before '${record.url}' could be stored and charged.`);
