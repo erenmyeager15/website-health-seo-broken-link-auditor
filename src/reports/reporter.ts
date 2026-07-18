@@ -3,6 +3,8 @@ import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf
 import type { AuditSummary, PageAuditRecord, AuditIssue, IssueSeverity } from '../types.js';
 import type { RegressionComparison } from '../baseline/regression-tracker.js';
 
+export const HTML_REPORT_CONTENT_TYPE = 'text/html';
+
 export function generateDeterministicAgentSummary(
   pagesAudited: number,
   linksChecked: number,
@@ -311,7 +313,7 @@ export async function saveReportsAndSummary(
 
   if (generateHtmlReport || generatePdfReport) {
     const html = generateHtmlReportString(summary, pageRecords, allIssuesWithUrls);
-    await store.setValue('report.html', html, { contentType: 'text/html; charset=utf-8' });
+    await store.setValue('report.html', html, { contentType: HTML_REPORT_CONTENT_TYPE });
     summary.reports.htmlReportUrl = store.getPublicUrl('report.html');
   }
 

@@ -1,11 +1,14 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { atomicPushAndChargePage } from '../src/billing/charging.js';
 import {
   escapeHtml,
   generateDeterministicAgentSummary,
   generateHtmlReportString,
   generatePdfReportBuffer,
+  HTML_REPORT_CONTENT_TYPE,
 } from '../src/reports/reporter.js';
 import type { AuditSummary, PageAuditRecord } from '../src/types.js';
 
@@ -100,6 +103,14 @@ describe('Billing Safety & Reporting Summary', () => {
     assert.equal(html.includes(malicious), false);
     assert.equal(html.includes(escapeHtml(malicious)), true);
     assert.equal(html.includes('Content-Security-Policy'), true);
+  });
+
+  test('HTML report content type matches the Apify key-value store schema', () => {
+    const schema = JSON.parse(readFileSync(resolve('.actor/key_value_store_schema.json'), 'utf8')) as {
+      collections: { htmlReport: { contentTypes: string[] } };
+    };
+    assert.equal(HTML_REPORT_CONTENT_TYPE, 'text/html');
+    assert.equal(schema.collections.htmlReport.contentTypes.includes(HTML_REPORT_CONTENT_TYPE), true);
   });
 
   test('PDF report generator returns a real PDF document', async () => {
