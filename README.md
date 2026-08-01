@@ -194,4 +194,4 @@ See `SECURITY.md` for implementation details.
 
 Useful, non-blocked page records use the `page-audited` event when pay-per-event pricing is configured. Dataset storage and event charging use the Apify SDK's combined `Actor.pushData(record, eventName)` operation. Blocked, skipped, duplicate, and synthetic pages are not charged as successful page audits.
 
-No live price is configured by this repository.
+The current Store price is `$0.005` per successfully audited page plus the small Actor-start event. Apify Console displays the authoritative live price before each run.
