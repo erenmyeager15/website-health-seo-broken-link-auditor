@@ -48,7 +48,7 @@
       "title": "Check External Links",
       "type": "boolean",
       "description": "Check status of external links (checked via HEAD/GET once, never recursively crawled).",
-      "default": true,
+      "default": false,
       "prefill": false
     },
     "maxExternalLinks": {

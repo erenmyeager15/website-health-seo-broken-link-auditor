@@ -51,7 +51,7 @@ try {
   const requestedMaxPages = clamp(rawInput.maxPages ?? 25, 1, 250);
   const maxCrawlDepth = clamp(rawInput.maxCrawlDepth ?? 3, 0, 10);
   const maxLinksPerPage = clamp(rawInput.maxLinksPerPage ?? 100, 1, 500);
-  const checkExternalLinks = rawInput.checkExternalLinks ?? true;
+  const checkExternalLinks = rawInput.checkExternalLinks ?? false;
   const maxExternalLinks = clamp(rawInput.maxExternalLinks ?? 250, 0, 2_000);
   const includePerformance = rawInput.includePerformance ?? false;
   const maxPerformancePages = clamp(rawInput.maxPerformancePages ?? 1, 1, 5);
