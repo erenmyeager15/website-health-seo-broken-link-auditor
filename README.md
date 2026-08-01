@@ -4,6 +4,20 @@ Audit an authorized website for technical SEO, broken links, redirect chains, in
 
 This Actor is HTTP-only. It uses Crawlee `BasicCrawler`, a bounded HTTP client, and Cheerio. It does not run Chromium or execute page JavaScript.
 
+## Start with the Safe Demo
+
+[Run the public one-page SEO audit example](https://apify.com/fascinating_lentil/website-health-seo-broken-link-auditor/examples/quick-one-page-website-audit). It audits one lightweight public page and returns a structured dataset item plus an HTML report without requiring a proxy or PageSpeed API key.
+
+A verified 512 MB cloud proof generated HTML and PDF reports in 7.17 seconds and used approximately $0.000254 in platform resources. Actual usage varies by website, enabled checks, page size, and network conditions. Actor pricing is $0.005 per successfully audited page plus the small Actor-start event.
+
+Use it for:
+
+- Technical SEO and indexability checks with evidence and prioritized fixes
+- Broken internal links, optional external-link checks, and redirect chains
+- Sitemap, robots.txt, TLS certificate, and selected security-header checks
+- Repeat audits that identify new, resolved, and materially changed findings
+- JSON, CSV, Excel, HTML, PDF, API, MCP, and automation workflows
+
 ## Responsible Use
 
 You must own the target website or have explicit prior authorization to audit it.
@@ -63,7 +77,7 @@ For any real website, set `confirmAuthorizedUse` to `true` only after confirming
 | `maxPages` | `25` | 250 | Maximum internal pages processed |
 | `maxCrawlDepth` | `3` | 10 | Maximum click depth from the start page |
 | `maxLinksPerPage` | `100` | 500 | Maximum unique links extracted per page |
-| `checkExternalLinks` | `true` | - | Run a bounded status check for external links |
+| `checkExternalLinks` | `false` | - | Run a bounded status check for external links when explicitly enabled |
 | `maxExternalLinks` | `250` | 2,000 | Maximum unique external links checked |
 | `includePerformance` | `false` | - | Enable PageSpeed Insights |
 | `pageSpeedApiKey` | empty | secret | Optional Google PageSpeed API key; never returned |
